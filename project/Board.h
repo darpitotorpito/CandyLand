@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+
 #define RED "\033[;41m"     /* Red */
 #define GREEN "\033[;42m"   /* Green */
 #define BLUE "\033[;44m"    /* Blue */
