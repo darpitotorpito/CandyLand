@@ -2,7 +2,15 @@
 #define BOARD_H
 
 #include <iostream>
+#include <iostream>
+#include <cmath>
+#include <iomanip>
+#include <cassert>
+#include <string>
 #include <vector>
+#include <fstream>
+#include <sstream>
+using namespace std;
 
 #define RED "\033[;41m"     /* Red */
 #define GREEN "\033[;42m"   /* Green */
