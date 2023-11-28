@@ -51,7 +51,7 @@ public:
     Board();
 
     void resetBoard();
-    void displayTile(int);
+    void displayTile(int, int player_number);
     void displayBoard();
 
     bool setPlayerPosition(int new_position, int player_number);
@@ -62,6 +62,8 @@ public:
 
     bool addCandyStore(int);
     bool isPositionCandyStore(int); 
+
+    void isPositionHiddenTreasure(int);
 
     bool movePlayer(int tile_to_move_forward, int player_number);
 };

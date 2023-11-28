@@ -58,4 +58,6 @@ public:
     Candy findCandy(string candy_name);                    // Searches for a Candy in the Player's inventory
     bool addCandy(Candy candy);                            // Adds a Candy to the Player's inventory
     bool removeCandy(string candy_name);                   // Removes a Candy from the Player's inventory
-}
+};
+
+#endif

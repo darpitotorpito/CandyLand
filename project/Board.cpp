@@ -26,10 +26,13 @@ void Board::resetBoard()
         _candy_store_position[i] = -1;
     }
 
-    _player_position = 0;
+    _player_position[0] = 0;
+    _player_position[1] = 0;
+    _player_position[2] = 0;
+    _player_position[3] = 0;
 }
 
-void Board::displayTile(int position)
+void Board::displayTile(int position, int player_number)
 {
     if (position < 0 || position >= _BOARD_SIZE)
     {
@@ -37,7 +40,7 @@ void Board::displayTile(int position)
     }
     Tile target = _tiles[position];
     cout << target.color << " ";
-    if (position == _player_position)
+    if (position == _player_position[player_number])
     {
         cout << "X";
     }
@@ -50,10 +53,11 @@ void Board::displayTile(int position)
 
 void Board::displayBoard()
 {
+    int x = 0;
     // First horizontal segment
     for (int i = 0; i <= 23; i++)
     {
-        displayTile(i);
+        displayTile(i , x);
     }
     cout << endl;
     // First vertical segment
@@ -63,19 +67,19 @@ void Board::displayBoard()
         {
             cout << "   ";
         }
-        displayTile(i);
+        displayTile(i, x);
         cout << endl;
     }
     // Second horizontal segment
     for (int i = 52; i > 28; i--)
     {
-        displayTile(i);
+        displayTile(i, x);
     }
     cout << endl;
     // Second vertical segment
     for (int i = 53; i <= 57; i++)
     {
-        displayTile(i);
+        displayTile(i, x);
         for (int j = 0; j < 23; j++)
         {
             cout << "   ";
@@ -85,7 +89,7 @@ void Board::displayBoard()
     // Third horizontal segment
     for (int i = 58; i < _BOARD_SIZE; i++)
     {
-        displayTile(i);
+        displayTile(i, x);
     }
     cout << ORANGE << "Castle" << RESET << endl;
 }
@@ -136,6 +140,13 @@ bool Board::isPositionCandyStore(int board_position)
         }
     }
     return false;
+}
+
+void Board::isPositionHiddenTreasure(int)
+{
+    // Check the hidden treasure position array to see weather the integer value passed into the function matches one of the positions of the hidden treasures
+    // If the position passed matches a position in the array return true to indicate a hidden treasure
+    // Otherwise return false to indicate no hidden treasure
 }
 
 bool Board::movePlayer(int tile_to_move_forward, int player_number)
