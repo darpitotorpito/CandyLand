@@ -45,7 +45,7 @@ private:
     const static int _MAX_CANDY_STORE = 3;
     int _candy_store_position[_MAX_CANDY_STORE];
     int _candy_store_count;
-    int _player_position;
+    int _player_position[4];
 
 public:
     Board();
@@ -54,16 +54,16 @@ public:
     void displayTile(int);
     void displayBoard();
 
-    bool setPlayerPosition(int);
+    bool setPlayerPosition(int new_position, int player_number);
 
     int getBoardSize() const;
     int getCandyStoreCount() const;
-    int getPlayerPosition() const;
+    int getPlayerPosition(int player_number) const;
 
     bool addCandyStore(int);
     bool isPositionCandyStore(int); 
 
-    bool movePlayer(int tile_to_move_forward);
+    bool movePlayer(int tile_to_move_forward, int player_number);
 };
 
 #endif

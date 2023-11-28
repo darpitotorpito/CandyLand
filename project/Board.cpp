@@ -90,11 +90,11 @@ void Board::displayBoard()
     cout << ORANGE << "Castle" << RESET << endl;
 }
 
-bool Board::setPlayerPosition(int new_position)
+bool Board::setPlayerPosition(int new_position, int player_number)
 {
     if (new_position >= 0 && new_position < _BOARD_SIZE)
     {
-        _player_position = new_position;
+        _player_position[player_number] = new_position;
         return true;
     }
     return false;
@@ -110,9 +110,9 @@ int Board::getCandyStoreCount() const
     return _candy_store_count;
 }
 
-int Board::getPlayerPosition() const
+int Board::getPlayerPosition(int player_number) const
 {
-    return _player_position;
+    return _player_position[player_number];
 }
 
 bool Board::addCandyStore(int position)
@@ -138,13 +138,13 @@ bool Board::isPositionCandyStore(int board_position)
     return false;
 }
 
-bool Board::movePlayer(int tile_to_move_forward)
+bool Board::movePlayer(int tile_to_move_forward, int player_number)
 {
-    int new_player_position = tile_to_move_forward + _player_position;
+    int new_player_position = tile_to_move_forward + _player_position[player_number];
     if(new_player_position < 0 || new_player_position >= _BOARD_SIZE)
     {
         return false;
     }
-    _player_position = new_player_position;
+    _player_position[player_number] = new_player_position;
     return true;
 }
