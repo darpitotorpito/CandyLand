@@ -26,14 +26,13 @@ void Board::resetBoard()
         _candy_store_position[i] = -1;
     }
 
-    for (int i = 0; i < _PLAYER_COUNT; i++)
-    {
-        _player_position[i] = 0;
-    }
-
+    _player_position[0] = 0;
+    _player_position[1] = 0;
+    _player_position[2] = 0;
+    _player_position[3] = 0;
 }
 
-void Board::displayTile(int position)
+void Board::displayTile(int position, int player_number)
 {
     if (position < 0 || position >= _BOARD_SIZE)
     {
@@ -41,73 +40,46 @@ void Board::displayTile(int position)
     }
     Tile target = _tiles[position];
     cout << target.color << " ";
-    char p0, p1, p2, p3;
-
-    if (position == _player_position[0])
+    if (position == _player_position[player_number])
     {
-        p0 = '1';
+        cout << "X";
     }
     else
     {
-        p0 = '_';
+        cout << " ";
     }
-    if (position == _player_position[1])
-    {
-        p1 = '2';
-    }
-    else
-    {
-        p1 = '_';
-    }
-    if (position == _player_position[2])
-    {
-        p2 = '3';
-    }
-    else
-    {
-        p2 = '_';
-    }
-    if (position == _player_position[3])
-    {
-        p3 = '4';
-    }
-    else
-    {
-        p3 = '_';
-    }
-
-    cout << p0 << " " << p1 << " " << p2 << " " << p3;
     cout << " " << RESET;
 }
 
 void Board::displayBoard()
 {
+    int x = 0;
     // First horizontal segment
-    for (int i = 0; i <= 17; i++)
+    for (int i = 0; i <= 23; i++)
     {
-        displayTile(i);
+        displayTile(i , x);
     }
     cout << endl;
     // First vertical segment
-    for (int i = 18; i <= 32; i++)
+    for (int i = 24; i <= 28; i++)
     {
-        for (int j = 0; j < 51; j++)
+        for (int j = 0; j < 23; j++)
         {
             cout << "   ";
         }
-        displayTile(i);
+        displayTile(i, x);
         cout << endl;
     }
     // Second horizontal segment
-    for (int i = 50; i > 32; i--)
+    for (int i = 52; i > 28; i--)
     {
-        displayTile(i);
+        displayTile(i, x);
     }
     cout << endl;
     // Second vertical segment
-    for (int i = 51; i <= 66; i++)
+    for (int i = 53; i <= 57; i++)
     {
-        displayTile(i);
+        displayTile(i, x);
         for (int j = 0; j < 23; j++)
         {
             cout << "   ";
@@ -115,18 +87,18 @@ void Board::displayBoard()
         cout << endl;
     }
     // Third horizontal segment
-    for (int i = 67; i < _BOARD_SIZE; i++)
+    for (int i = 58; i < _BOARD_SIZE; i++)
     {
-        displayTile(i);
+        displayTile(i, x);
     }
     cout << ORANGE << "Castle" << RESET << endl;
 }
 
-bool Board::setPlayerPosition(int new_position, int player_num)
+bool Board::setPlayerPosition(int new_position, int player_number)
 {
     if (new_position >= 0 && new_position < _BOARD_SIZE)
     {
-        _player_position[player_num] = new_position;
+        _player_position[player_number] = new_position;
         return true;
     }
     return false;
@@ -142,9 +114,9 @@ int Board::getCandyStoreCount() const
     return _candy_store_count;
 }
 
-int Board::getPlayerPosition(int player_num) const
+int Board::getPlayerPosition(int player_number) const
 {
-    return _player_position[player_num];
+    return _player_position[player_number];
 }
 
 bool Board::addCandyStore(int position)
@@ -170,13 +142,20 @@ bool Board::isPositionCandyStore(int board_position)
     return false;
 }
 
-bool Board::movePlayer(int tile_to_move_forward, int player_num)
+void Board::isPositionHiddenTreasure(int)
 {
-    int new_player_position = tile_to_move_forward + _player_position[player_num];
+    // Check the hidden treasure position array to see weather the integer value passed into the function matches one of the positions of the hidden treasures
+    // If the position passed matches a position in the array return true to indicate a hidden treasure
+    // Otherwise return false to indicate no hidden treasure
+}
+
+bool Board::movePlayer(int tile_to_move_forward, int player_number)
+{
+    int new_player_position = tile_to_move_forward + _player_position[player_number];
     if(new_player_position < 0 || new_player_position >= _BOARD_SIZE)
     {
         return false;
     }
-    _player_position[player_num] = new_player_position;
+    _player_position[player_number] = new_player_position;
     return true;
 }
