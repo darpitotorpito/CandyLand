@@ -47,9 +47,9 @@ public:
     int getPlayerNumber(); // Returns the numeric value assigned to the player
 
     // Setter Functions
-    void setStamina(int stamina);  // Takes an integer as input, and sets stamina to the input value.
-    void setGold(double gold);     // Takes a double as input, and sets gold to the input value.
-    void setEffect(string effect); // Takes a string as input, and sets effect to the input value.
+    void setStamina(int stamina);            // Takes an integer as input, and sets stamina to the input value.
+    void setGold(double gold);               // Takes a double as input, and sets gold to the input value.
+    void setEffect(string effect);           // Takes a string as input, and sets effect to the input value.
     void setPlayerNumber(int player_number); // Takes an integer as an input, and sets player number to the input value.
 
     // Member Functions
