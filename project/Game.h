@@ -27,7 +27,7 @@ struct Character
 class Game
 {
 private:
-    int _players;                          // Number of players playing
+    int _player_count;                          // Number of players playing
     vector<Candy> _loaded_candies;        // The candies loaded into the game
     vector<Character> _loaded_characters; // The characters loaded into the game
 
@@ -38,9 +38,10 @@ public:
     // ===== ACCESSOR FUNCTIONS ===== //
     vector<Candy> getLoadedCandies();
     vector<Character> getLoadedCharacters();
+    int getPlayerCount();
 
     // ===== MUTATOR FUNCTIONS ===== //
-    void setPlayers(int players);
+    void setPlayerCount(int player_count);
 
     // ===== MEMBER FUNCTIONS ===== //
     bool loadCandies();

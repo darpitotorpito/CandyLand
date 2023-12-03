@@ -26,11 +26,10 @@ void Board::resetBoard()
         _candy_store_position[i] = -1;
     }
 
-    for (int i = 0; i < _PLAYER_COUNT; i++)
+    for (int i = 0; i < _player_count; i++)
     {
-        _player_position[i] = 0;
+        _player_positions.push_back(0);
     }
-
 }
 
 void Board::displayTile(int position)
@@ -41,42 +40,17 @@ void Board::displayTile(int position)
     }
     Tile target = _tiles[position];
     cout << target.color << " ";
-    char p0, p1, p2, p3;
+    char player_display[4] = {'_', '_', '_', '_'};
 
-    if (position == _player_position[0])
+    for (int j = 0; j < _player_positions.size(); j++)
     {
-        p0 = '1';
-    }
-    else
-    {
-        p0 = '_';
-    }
-    if (position == _player_position[1])
-    {
-        p1 = '2';
-    }
-    else
-    {
-        p1 = '_';
-    }
-    if (position == _player_position[2])
-    {
-        p2 = '3';
-    }
-    else
-    {
-        p2 = '_';
-    }
-    if (position == _player_position[3])
-    {
-        p3 = '4';
-    }
-    else
-    {
-        p3 = '_';
+        if (position == _player_positions.at(j))
+        {
+            player_display[j] = '1' + j;
+        }
     }
 
-    cout << p0 << " " << p1 << " " << p2 << " " << p3;
+    cout << player_display[0] << " " << player_display[1] << " " << player_display[2] << " " << player_display[3];
     cout << " " << RESET;
 }
 
@@ -126,7 +100,7 @@ bool Board::setPlayerPosition(int new_position, int player_num)
 {
     if (new_position >= 0 && new_position < _BOARD_SIZE)
     {
-        _player_position[player_num] = new_position;
+        _player_positions[player_num] = new_position;
         return true;
     }
     return false;
@@ -144,7 +118,17 @@ int Board::getCandyStoreCount() const
 
 int Board::getPlayerPosition(int player_num) const
 {
-    return _player_position[player_num];
+    return _player_positions[player_num];
+}
+
+int Board::getPlayerCount() const
+{
+    return _player_count;
+}
+
+void Board::setPlayerCount(int player_count)
+{
+    _player_count = player_count;
 }
 
 bool Board::addCandyStore(int position)
@@ -162,7 +146,7 @@ bool Board::isPositionCandyStore(int board_position)
 {
     for (int i = 0; i < _candy_store_count; i++)
     {
-        if(_candy_store_position[i] == board_position)
+        if (_candy_store_position[i] == board_position)
         {
             return true;
         }
@@ -172,11 +156,11 @@ bool Board::isPositionCandyStore(int board_position)
 
 bool Board::movePlayer(int tile_to_move_forward, int player_num)
 {
-    int new_player_position = tile_to_move_forward + _player_position[player_num];
-    if(new_player_position < 0 || new_player_position >= _BOARD_SIZE)
+    int new_player_position = tile_to_move_forward + _player_positions[player_num];
+    if (new_player_position < 0 || new_player_position >= _BOARD_SIZE)
     {
         return false;
     }
-    _player_position[player_num] = new_player_position;
+    _player_positions[player_num] = new_player_position;
     return true;
 }

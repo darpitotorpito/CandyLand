@@ -36,8 +36,8 @@ private:
     const static int _MAX_CANDY_STORE = 3;
     int _candy_store_position[_MAX_CANDY_STORE];
     int _candy_store_count;
-    const static int _PLAYER_COUNT = 4;
-    int _player_position[_PLAYER_COUNT] = {0, 0, 0, 0};
+    int _player_count = 0;
+    vector<int> _player_positions;
 
 public:
     Board();
@@ -51,6 +51,9 @@ public:
     int getBoardSize() const;
     int getCandyStoreCount() const;
     int getPlayerPosition(int player_num) const;
+    int getPlayerCount() const;
+
+    void setPlayerCount(int player_count);
 
     bool addCandyStore(int);
     bool isPositionCandyStore(int); 

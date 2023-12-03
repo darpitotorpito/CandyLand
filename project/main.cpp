@@ -4,30 +4,20 @@
 
 int main()
 {
-    // Load the board
-    Board board;
-    board.displayBoard();
 
     // Load the game and information from text files
     Game game;
     game.loadCandies();
     game.loadCharacters();
 
+    // Load the players
     vector<Player> players = game.selectCharacters();
 
-    for (int i = 0; i < players.size(); i++)
-    {
-        cout << "Player Name: " << players.at(i).getPlayerName() << endl;
-        cout << "Player Number: " << players.at(i).getPlayerNumber() << endl;
-        cout << "Player Character Name: " << players.at(i).getPlayerCharacterName() << endl;
-        cout << "Player Stamina: " << players.at(i).getPlayerStamina() << endl;
-        cout << "Player Gold: " << players.at(i).getPlayerGold() << endl;
-        cout << "Player Effect: " << players.at(i).getPlayerEffect() << endl;
-        cout << "Player Inventory: " << endl;
-        players.at(i).printPlayerInventory();
-        cout << "--------------------------------------------" << endl;
-    }
-
+    // Load the board
+    Board board;
+    board.setPlayerCount(game.getPlayerCount());
+    board.resetBoard();
+    board.displayBoard();
 }
 
 void testLoadCandies()
@@ -39,7 +29,21 @@ void testLoadCandies()
     // }
     // return 0;
 }
-
+void testPlayerClass()
+{
+    //   for (int i = 0; i < players.size(); i++)
+    // {
+    //     cout << "Player Name: " << players.at(i).getPlayerName() << endl;
+    //     cout << "Player Number: " << players.at(i).getPlayerNumber() << endl;
+    //     cout << "Player Character Name: " << players.at(i).getPlayerCharacterName() << endl;
+    //     cout << "Player Stamina: " << players.at(i).getPlayerStamina() << endl;
+    //     cout << "Player Gold: " << players.at(i).getPlayerGold() << endl;
+    //     cout << "Player Effect: " << players.at(i).getPlayerEffect() << endl;
+    //     cout << "Player Inventory: " << endl;
+    //     players.at(i).printPlayerInventory();
+    //     cout << "--------------------------------------------" << endl;
+    // }
+}
 void testLoadCharacters()
 {
     // vector<Character> characters = game.getLoadedCharacters();

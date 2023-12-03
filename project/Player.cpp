@@ -14,6 +14,7 @@ Player::Player() // Default Constructor
     // _inventory[_MAX_CANDY_AMOUNT] = {};
     _candy_amount = 0;
 }
+
 Player::Player(int player_number, string player_name, string character_name, int stamina, int gold, string effect, Candy inventory[_MAX_CANDY_AMOUNT])
 {
     _player_number = player_number;

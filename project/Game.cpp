@@ -17,10 +17,15 @@ vector<Character> Game::getLoadedCharacters() // Returns the loaded characters i
     return _loaded_characters;
 }
 
-// ===== MUTATOR FUNCTIONS ===== //
-void Game::setPlayers(int players)
+int Game::getPlayerCount()
 {
-    _players = players;
+    return _player_count;
+}
+
+// ===== MUTATOR FUNCTIONS ===== //
+void Game::setPlayerCount(int player_count)
+{
+    _player_count = player_count;
 }
 
 // ===== MEMBER FUNCTIONS ====== //
@@ -134,13 +139,12 @@ bool Game::loadCharacters() // Loads characters from a .txt file into the Game c
 
 vector<Player> Game::selectCharacters()
 {
-    cout << "Welcome to the game of CandyLand. Please enter the number of players:" << endl; // Ask user to input number of players
-    string num_of_players_str;                                                               // Create variable to store the number of players as a string
-    getline(cin, num_of_players_str);                                                        // Collect user input for number of players
-    int players_number = stoi(num_of_players_str);                                                      // Convert number of players to integer
-    setPlayers(players_number);
-    
-    
+    cout << "Welcome to the game of CandyLand. The maximum number of players is 4. Please enter the number of players:" << endl; // Ask user to input number of players
+    string num_of_players_str;                                                                                                   // Create variable to store the number of players as a string
+    getline(cin, num_of_players_str);                                                                                            // Collect user input for number of players
+    int players_number = stoi(num_of_players_str);                                                                               // Convert number of players to integer
+    setPlayerCount(players_number);
+
     vector<Player> players;
 
     for (int i = 0; i < players_number; i++)
@@ -152,7 +156,6 @@ vector<Player> Game::selectCharacters()
         Player lePlayer;
         lePlayer.setPlayerName(name);
         lePlayer.setPlayerNumber(i);
-
 
         // Ask the player to choose a character
         cout << "Awesome! Here is a list of characters to select from:" << endl;
@@ -176,7 +179,7 @@ vector<Player> Game::selectCharacters()
                     cout << "Your selected character is: " << selected_character << endl;
 
                     int selected_character_index = -1;
-                    for (int k = 0; k <  _loaded_characters.size(); k++)
+                    for (int k = 0; k < _loaded_characters.size(); k++)
                     {
                         if (_loaded_characters.at(k).name == selected_character)
                         {
@@ -191,7 +194,6 @@ vector<Player> Game::selectCharacters()
                     lePlayer.setPlayerCandyAmount();
 
                     players.push_back(lePlayer);
-                    
 
                     vector<Character> new_character_list;
                     for (int l = 0; l < _loaded_characters.size(); l++)
@@ -209,7 +211,6 @@ vector<Player> Game::selectCharacters()
                 cout << "Invalid selection. Please enter a valid cahracter." << endl;
             }
         }
-
     }
     return players;
 }
