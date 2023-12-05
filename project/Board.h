@@ -41,6 +41,8 @@ private:
     int _player_count = 0;
     vector<int> _player_positions;
     vector<int> _player_positions_old;
+    const static int _HIDDEN_TREASURE_AMOUNT = 3;
+    int _hidden_treasure_positions[_HIDDEN_TREASURE_AMOUNT];
 
 public:
     Board();
@@ -59,6 +61,10 @@ public:
 
     void setPlayerCount(int player_count);
     void setPlayerPositionOld(int old_position, int player_num);
+
+    void generateHiddenTreasures();
+    bool isPositionHiddenTreasure(int position);
+    void testHiddenTreasure();
 
     bool addCandyStore(int);
     bool isPositionCandyStore(int); 

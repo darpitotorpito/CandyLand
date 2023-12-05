@@ -35,6 +35,8 @@ void Board::resetBoard()
     {
         _player_positions_old.push_back(0);
     }
+
+    generateHiddenTreasures();
 }
 
 void Board::displayTile(int position)
@@ -144,6 +146,79 @@ void Board::setPlayerCount(int player_count)
 void Board::setPlayerPositionOld(int old_position, int player_num)
 {
     _player_positions_old[player_num] = old_position;
+}
+
+void Board::generateHiddenTreasures()
+{
+    srand(time(0));
+
+    for (int i = 0; i < _HIDDEN_TREASURE_AMOUNT; i++)
+    {
+        bool new_treasure_generated = false;
+        while (!new_treasure_generated)
+        {
+            int hidden_treasure_pos = rand() % _BOARD_SIZE + 1;
+
+            bool is_unique = true;
+            for (int j = 0; j < i; j++)
+            {
+                if (_hidden_treasure_positions[j] == hidden_treasure_pos)
+                {
+                    is_unique = false;
+                    break;
+                }
+            }
+
+            if (is_unique)
+            {
+                _hidden_treasure_positions[i] = hidden_treasure_pos;
+                new_treasure_generated = true;
+            }
+        }
+    }
+}
+
+bool Board::isPositionHiddenTreasure(int position)
+{
+    for (int i = 0; i < _HIDDEN_TREASURE_AMOUNT; i++)
+    {
+        if (position == _hidden_treasure_positions[i])
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+void Board::testHiddenTreasure()
+{
+    for (int i = 0; i < _HIDDEN_TREASURE_AMOUNT; i++)
+    {
+        cout << "The hidden treasure is located at: " << _hidden_treasure_positions[i] << endl;
+    }
+    
+    for (int i = 0; i < _BOARD_SIZE; i++)
+    {
+        bool isHiddenTreasure = false;
+        
+        for (int j = 0; j < _HIDDEN_TREASURE_AMOUNT; j++)
+        {
+            if (i == _hidden_treasure_positions[j])
+            {
+                isHiddenTreasure = true;
+                break;
+            }
+        }
+        
+        if (isHiddenTreasure)
+        {
+            cout << "Position " << i << ": TRUE" << endl;
+        }
+        else
+        {
+            cout << "Position " << i << ": FALSE" << endl;
+        }
+    }
 }
 
 bool Board::addCandyStore(int position)

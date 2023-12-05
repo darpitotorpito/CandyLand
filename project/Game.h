@@ -30,6 +30,7 @@ private:
     int _player_count;                    // Number of players playing
     vector<Candy> _loaded_candies;        // The candies loaded into the game
     vector<Character> _loaded_characters; // The characters loaded into the game
+    vector<Player> _loaded_players;       // The players loaded into the game
     int generateRandomCard();             // Generates a random card
 
 public:
@@ -39,19 +40,23 @@ public:
     // ===== ACCESSOR FUNCTIONS ===== //
     vector<Candy> getLoadedCandies();        // Returns the candies loaded into the game as a vector of Candy objects
     vector<Character> getLoadedCharacters(); // Returns the characters loaded into the game as a vector of Character objects
-    int getPlayerCount();                    // Returns the number of players playing the game as an integer
+    vector<Player> getLoadedPlayers();
+    int getPlayerCount(); // Returns the number of players playing the game as an integer
 
     // ===== MUTATOR FUNCTIONS ===== //
     void setPlayerCount(int player_count); // Sets the player count to the provided integer argument
+    void setLoadedPlayers(vector<Player> loaded_players);
 
     // ===== MEMBER FUNCTIONS ===== //
-    bool loadCandies();                                     // Loads candies into the game from a .txt file
-    bool loadCharacters();                                  // Loads characters into the game from a .txt file
-    vector<Player> selectCharacters();                      // Displays menu and allows players to select their characters
-    void printCharacterData();                              // Prints the data of each of the characters
-    void drawCard(Player &current_player, Board &board);    // Lets player draw a card
-    void specialTile(Player &current_player, Board &board); // If the player lands on a special tile
-    void nextTurn(Player &current_player, Board &board);    // Used to complete each player turn
+    bool loadCandies();                                        // Loads candies into the game from a .txt file
+    bool loadCharacters();                                     // Loads characters into the game from a .txt file
+    vector<Player> selectCharacters();                         // Displays menu and allows players to select their characters
+    void printCharacterData();                                 // Prints the data of each of the characters
+    void drawCard(Player &current_player, Board &board);       // Lets player draw a card
+    void specialTile(Player &current_player, Board &board);    // If the player lands on a special tile
+    void sameTile(Player &current_player, Board &board);       // If the player lands on the same tile as another player.
+    void hiddenTreasure(Player &current_player, Board &board); // If the player lands on a hidden treasure.
+    void nextTurn(Player &current_player, Board &board);       // Used to complete each player turn
 };
 
 #endif

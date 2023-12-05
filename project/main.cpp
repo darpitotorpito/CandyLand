@@ -11,15 +11,23 @@ int main()
     game.loadCharacters();
 
     // Load the players
-    vector<Player> players = game.selectCharacters();
+    // game.setLoadedPlayers(game.selectCharacters());
 
     // Load the board
     Board board;
-    board.setPlayerCount(game.getPlayerCount());
-    board.resetBoard();
-    board.displayBoard();
-    game.nextTurn(players.at(0), board);
-    board.displayBoard();
+
+    board.testHiddenTreasure();
+    // board.setPlayerCount(game.getPlayerCount());
+    // board.resetBoard();
+    // board.displayBoard();
+    // board.setPlayerPosition(10, game.getLoadedPlayers().at(0).getPlayerNumber());
+    // board.setPlayerPosition(10, game.getLoadedPlayers().at(1).getPlayerNumber());
+    // vector <Player> loaded_players_temp = game.getLoadedPlayers();
+    // loaded_players_temp.at(0).setPlayerGold(5);
+    // game.setLoadedPlayers(loaded_players_temp);
+    // game.getLoadedPlayers().at(0).printPlayerStats();
+    // board.displayBoard();
+    // game.sameTile(game.getLoadedPlayers().at(0), board);
 }
 
 void testLoadCandies()

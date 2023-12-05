@@ -17,6 +17,11 @@ vector<Character> Game::getLoadedCharacters() // Returns the loaded characters i
     return _loaded_characters;
 }
 
+vector <Player> Game::getLoadedPlayers()
+{
+    return _loaded_players;
+}
+
 int Game::getPlayerCount()
 {
     return _player_count;
@@ -26,6 +31,11 @@ int Game::getPlayerCount()
 void Game::setPlayerCount(int player_count)
 {
     _player_count = player_count;
+}
+
+void Game::setLoadedPlayers(vector <Player> loaded_players)
+{
+    _loaded_players = loaded_players;
 }
 
 // ===== MEMBER FUNCTIONS ====== //
@@ -299,7 +309,6 @@ void Game::drawCard(Player &current_player, Board &board)
             int new_pos = board.findNextColorTile(current_player.getPlayerNumber(), color);
             board.setPlayerPosition(new_pos, current_player.getPlayerNumber());
             int new_pos2 = board.findNextColorTile(current_player.getPlayerNumber(), color);
-            cout << new_pos2 << endl;
             board.setPlayerPosition(new_pos2, current_player.getPlayerNumber());
         }
         else if (generated_card == 5)
@@ -326,6 +335,12 @@ void Game::drawCard(Player &current_player, Board &board)
 void Game::specialTile(Player &current_player, Board &board)
 {
     srand(time(0));
+    int special_tile_chance = 0;
+    special_tile_chance = rand() % 10 + 1;
+
+    if (special_tile_chance <= 3)
+    {
+    srand(time(0));
     int special_tile_type = 0;
     special_tile_type = rand() % 4 + 1;
 
@@ -337,12 +352,12 @@ void Game::specialTile(Player &current_player, Board &board)
         if (board.getPlayerPosition(current_player.getPlayerNumber()) >= 79)
         {
             board.setPlayerPosition(board.getBoardSize(), current_player.getPlayerNumber());
-            cout << "Your position is now " << board.getPlayerPosition(current_player.getPlayerNumber());
+            board.displayBoard();
         }
         else
         {
             board.movePlayer(4, current_player.getPlayerNumber());
-            cout << "Your position is now " << board.getPlayerPosition(current_player.getPlayerNumber());
+            board.displayBoard();
         }
     }
     else if (special_tile_type == 2)
@@ -356,23 +371,18 @@ void Game::specialTile(Player &current_player, Board &board)
         cout << "You have landed on a special tile! The tile is a Gumdrop Forrest Tile." << endl;
         cout << "You will lose between 5-10 gold coins. You will be taken 4 tiles backwards." << endl;
 
-        srand(time(0));
-        int gold_lost = 0;
-        gold_lost = rand() % 5 + 1;
-        current_player.setPlayerGold(current_player.getPlayerGold() - gold_lost);
-        cout << "You lost " << gold_lost << " gold. You now have " << current_player.getPlayerGold() << " gold.";
+        current_player.removeRandomGold(10, 5);
 
         if (board.getPlayerPosition(current_player.getPlayerNumber()) <= 4)
         {
             board.setPlayerPosition(0, current_player.getPlayerNumber());
-            cout << "Your position is now " << board.getPlayerPosition(current_player.getPlayerNumber());
+            board.displayBoard();
         }
         else
         {
             board.movePlayer(-4, current_player.getPlayerNumber());
-            cout << "Your position is now " << board.getPlayerPosition(current_player.getPlayerNumber());
+            board.displayBoard();
         }
-
     }
     else if (special_tile_type == 4)
     {
@@ -380,9 +390,52 @@ void Game::specialTile(Player &current_player, Board &board)
         cout << "You will lose one of your candies. You will be taken back to your previous position." << endl;
 
         board.setPlayerPosition(board.getPlayerPositionOld(current_player.getPlayerNumber()), current_player.getPlayerNumber());
-        cout << "Your position is now " << board.getPlayerPosition(current_player.getPlayerNumber());
+        board.displayBoard();
 
+        current_player.removeRandomCandy();
     }
+    }
+}
+
+void Game::sameTile(Player &current_player, Board &board)
+{
+    for (int i = 0; i < _player_count; i++)
+    {
+        if (i != current_player.getPlayerNumber())
+        {
+            if (board.getPlayerPosition(i) == board.getPlayerPosition(current_player.getPlayerNumber()))
+            {
+                cout << current_player.getPlayerName() << " has ended their turn on the same tile as " << _loaded_players.at(i).getPlayerName() << endl;
+
+                if (current_player.getPlayerRobbersRepel() == true)
+                {
+                    cout << current_player.getPlayerName() << " has a Robbers Repel shield. No gold can be stolen by " << _loaded_players.at(i).getPlayerName() << endl;
+                }
+                else
+                {
+                    cout << current_player.getPlayerName() << " has no shield. " << _loaded_players.at(i).getPlayerName() << " will steal 5 - 30 coins from " << current_player.getPlayerName() << "." << endl;
+                    int gold_removed = current_player.removeRandomGold(30, 5);
+                    _loaded_players.at(i).setPlayerGold(_loaded_players.at(i).getPlayerGold() + gold_removed);
+                    cout << gold_removed << " gold has been added to " << _loaded_players.at(i).getPlayerName() << "'s inventory." << endl;
+                    _loaded_players.at(i).printPlayerStats();
+                }
+            }
+        }
+    }
+}
+
+void Game::hiddenTreasure(Player &current_player, Board &board)
+{
+    srand(time(0));
+    int treasure_type = 0;
+    treasure_type = rand() % 100 + 1;
+    if (treasure_type <= 30)
+    {
+        cout << "You have landed on a Hidden Treasure! Your treasure is a Stamina Refill! You will receive between 10 - 30 additional stamina." << endl;
+        // THIS IS WHERE YOU LEFT OFF. YOU NEED TO CODE A FUNCTION TO TAKE AWAY A RANDOM AMOUNT OF STAMINA. 
+    }
+
+
 }
 
 void Game::nextTurn(Player &current_player, Board &board)
@@ -393,7 +446,8 @@ void Game::nextTurn(Player &current_player, Board &board)
     }
     else
     {
-        board.setPlayerPositionOld(board.getPlayerPosition(current_player.getPlayerNumber()), current_player.getPlayerNumber());
+        board.setPlayerPositionOld(board.getPlayerPosition(current_player.getPlayerNumber()), current_player.getPlayerNumber()); // Sets the old position of the player to the current position.
+
         bool turn_completed = false;
         while (turn_completed == false)
         {
@@ -429,19 +483,18 @@ void Game::nextTurn(Player &current_player, Board &board)
             if (turn_choice == 1)
             {
                 drawCard(current_player, board);
-
-                srand(time(0));
-                int special_tile_chance = 0;
-                special_tile_chance = rand() % 10 + 1;
-
-                if (special_tile_chance <= 3)
+                current_player.setPlayerStamina(current_player.getPlayerStamina() - 1);
+                cout << "You lost 1 stamina for your turn." << endl;
+                board.displayBoard();
+                specialTile(current_player, board);
+                sameTile(current_player, board);
+                if (board.isPositionHiddenTreasure(board.getPlayerPosition(current_player.getPlayerNumber())))
                 {
-                    specialTile(current_player, board);
+                    
                 }
-                else
-                {
-                    turn_completed = true;
-                }
+
+                turn_completed = true;
+
             }
             // else if (turn_choice == 2)
             // {
@@ -455,4 +508,3 @@ void Game::nextTurn(Player &current_player, Board &board)
         }
     }
 }
-
