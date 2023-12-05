@@ -11,8 +11,8 @@ Player::Player() // Default Constructor
     _stamina = 0;
     _gold = 0;
     _effect = "";
-    // _inventory[_MAX_CANDY_AMOUNT] = {};
     _candy_amount = 0;
+    _skip_turn = false;
 }
 
 Player::Player(int player_number, string player_name, string character_name, int stamina, int gold, string effect, Candy inventory[_MAX_CANDY_AMOUNT])
@@ -23,6 +23,7 @@ Player::Player(int player_number, string player_name, string character_name, int
     _stamina = stamina;
     _gold = gold;
     _effect = effect;
+    _skip_turn = false;
 }
 
 // ===== ACCESSOR FUNCTIONS ===== //
@@ -54,6 +55,11 @@ double Player::getPlayerGold() // Returns the player gold as a double
 string Player::getPlayerEffect() // Returns the player effect as a string
 {
     return _effect;
+}
+
+bool Player::getPlayerSkipTurn()
+{
+    return _skip_turn;
 }
 
 // ====== MUTATOR FUNCTIONS ===== //
@@ -95,7 +101,7 @@ void Player::setPlayerInventory(vector<Candy> candy)
     }
 }
 
-void Player::setPlayerCandyAmount()
+void Player::setPlayerCandyAmount(int candy_amount) // CHECK THIS
 {
     _candy_amount = 0;
     for (int i = 0; i < _MAX_CANDY_AMOUNT; i++)
@@ -105,6 +111,11 @@ void Player::setPlayerCandyAmount()
             _candy_amount++;
         }
     }
+}
+
+void Player::setPlayerSkipTurn(bool skip_turn)
+{
+    _skip_turn = skip_turn;
 }
 
 // ====== MEMBER FUNCTIONS ====== //
@@ -135,4 +146,17 @@ void Player::printPlayerInventory()
     cout << "|[" << print_inv[6] << "]|"
          << "[" << print_inv[7] << "]"
          << "|[" << print_inv[8] << "]|" << endl;
+}
+
+void Player::printPlayerStats()
+{
+    cout << "Here are your stats: " << endl;
+    cout << "Player Name: " << _player_name << endl;
+    cout << "Player Number: " << _player_number << endl;
+    cout << "Player Character Name: " << _character_name << endl;
+    cout << "Player Stamina: " << _stamina << endl;
+    cout << "Player Gold: " << _gold << endl;
+    cout << "Player Effect: " << _effect << endl;
+    cout << "Player Inventory: " << endl;
+    printPlayerInventory();
 }

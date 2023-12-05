@@ -137,7 +137,7 @@ bool Game::loadCharacters() // Loads characters from a .txt file into the Game c
     }
 }
 
-vector<Player> Game::selectCharacters()
+vector<Player> Game::selectCharacters() // Collects number of players, allows players to choose their characters, returns the players in the game as a vector of Player objects
 {
     cout << "Welcome to the game of CandyLand. The maximum number of players is 4. Please enter the number of players:" << endl; // Ask user to input number of players
     string num_of_players_str;                                                                                                   // Create variable to store the number of players as a string
@@ -191,7 +191,7 @@ vector<Player> Game::selectCharacters()
                     lePlayer.setPlayerStamina(_loaded_characters.at(selected_character_index).stamina);
                     lePlayer.setPlayerGold(_loaded_characters.at(selected_character_index).gold);
                     lePlayer.setPlayerInventory(_loaded_characters.at(selected_character_index).character_candy);
-                    lePlayer.setPlayerCandyAmount();
+                    lePlayer.setPlayerCandyAmount(_loaded_characters.at(selected_character_index).character_candy.size()); // CHECK THIS
 
                     players.push_back(lePlayer);
 
@@ -208,7 +208,7 @@ vector<Player> Game::selectCharacters()
             }
             if (selection_found == false)
             {
-                cout << "Invalid selection. Please enter a valid cahracter." << endl;
+                cout << "Invalid selection. Please enter a valid character." << endl;
             }
         }
     }
@@ -253,3 +253,206 @@ void Game::printCharacterData() // Prints the data of the character;
         cout << "-------------------------------------------" << endl;
     }
 }
+
+int Game::generateRandomCard()
+{
+    srand(time(0));
+    int card_number = 0;
+    card_number = rand() % 6 + 1;
+    return card_number;
+}
+
+void Game::drawCard(Player &current_player, Board &board)
+{
+    cout << "To draw a card press D. To return to turn menu press anything." << endl;
+    string draw_card;
+    getline(cin, draw_card);
+    if (draw_card == "D" || draw_card == "d")
+    {
+        string color;
+        int generated_card = generateRandomCard();
+        if (generated_card == 1)
+        {
+            cout << "You drew a blue card!" << endl;
+            color = BLUE;
+            int new_pos = board.findNextColorTile(current_player.getPlayerNumber(), color);
+            board.setPlayerPosition(new_pos, current_player.getPlayerNumber());
+        }
+        else if (generated_card == 2)
+        {
+            cout << "You drew a green card!" << endl;
+            color = GREEN;
+            int new_pos = board.findNextColorTile(current_player.getPlayerNumber(), color);
+            board.setPlayerPosition(new_pos, current_player.getPlayerNumber());
+        }
+        else if (generated_card == 3)
+        {
+            cout << "You drew a pink card!" << endl;
+            color = MAGENTA;
+            int new_pos = board.findNextColorTile(current_player.getPlayerNumber(), color);
+            board.setPlayerPosition(new_pos, current_player.getPlayerNumber());
+        }
+        else if (generated_card == 4)
+        {
+            cout << "You drew a double blue card!" << endl;
+            color = BLUE;
+            int new_pos = board.findNextColorTile(current_player.getPlayerNumber(), color);
+            board.setPlayerPosition(new_pos, current_player.getPlayerNumber());
+            int new_pos2 = board.findNextColorTile(current_player.getPlayerNumber(), color);
+            cout << new_pos2 << endl;
+            board.setPlayerPosition(new_pos2, current_player.getPlayerNumber());
+        }
+        else if (generated_card == 5)
+        {
+            cout << "You drew a double green card!" << endl;
+            color = GREEN;
+            int new_pos = board.findNextColorTile(current_player.getPlayerNumber(), color);
+            board.setPlayerPosition(new_pos, current_player.getPlayerNumber());
+            new_pos = board.findNextColorTile(current_player.getPlayerNumber(), color);
+            board.setPlayerPosition(new_pos, current_player.getPlayerNumber());
+        }
+        else if (generated_card == 6)
+        {
+            cout << "You drew a double pink card!" << endl;
+            color = MAGENTA;
+            int new_pos = board.findNextColorTile(current_player.getPlayerNumber(), color);
+            board.setPlayerPosition(new_pos, current_player.getPlayerNumber());
+            new_pos = board.findNextColorTile(current_player.getPlayerNumber(), color);
+            board.setPlayerPosition(new_pos, current_player.getPlayerNumber());
+        }
+    }
+}
+
+void Game::specialTile(Player &current_player, Board &board)
+{
+    srand(time(0));
+    int special_tile_type = 0;
+    special_tile_type = rand() % 4 + 1;
+
+    if (special_tile_type == 1)
+    {
+        cout << "You have landed on a special tile! The tile is a Shortcut Tile" << endl;
+        cout << "You are being moved forward 4 tiles!" << endl;
+
+        if (board.getPlayerPosition(current_player.getPlayerNumber()) >= 79)
+        {
+            board.setPlayerPosition(board.getBoardSize(), current_player.getPlayerNumber());
+            cout << "Your position is now " << board.getPlayerPosition(current_player.getPlayerNumber());
+        }
+        else
+        {
+            board.movePlayer(4, current_player.getPlayerNumber());
+            cout << "Your position is now " << board.getPlayerPosition(current_player.getPlayerNumber());
+        }
+    }
+    else if (special_tile_type == 2)
+    {
+        cout << "You have landed on a special tile! The tile is an Ice Cream Tile" << endl;
+        cout << "You have been granted an additional turn!" << endl;
+        nextTurn(current_player, board);
+    }
+    else if (special_tile_type == 3)
+    {
+        cout << "You have landed on a special tile! The tile is a Gumdrop Forrest Tile." << endl;
+        cout << "You will lose between 5-10 gold coins. You will be taken 4 tiles backwards." << endl;
+
+        srand(time(0));
+        int gold_lost = 0;
+        gold_lost = rand() % 5 + 1;
+        current_player.setPlayerGold(current_player.getPlayerGold() - gold_lost);
+        cout << "You lost " << gold_lost << " gold. You now have " << current_player.getPlayerGold() << " gold.";
+
+        if (board.getPlayerPosition(current_player.getPlayerNumber()) <= 4)
+        {
+            board.setPlayerPosition(0, current_player.getPlayerNumber());
+            cout << "Your position is now " << board.getPlayerPosition(current_player.getPlayerNumber());
+        }
+        else
+        {
+            board.movePlayer(-4, current_player.getPlayerNumber());
+            cout << "Your position is now " << board.getPlayerPosition(current_player.getPlayerNumber());
+        }
+
+    }
+    else if (special_tile_type == 4)
+    {
+        cout << "You have landed on a special tile! The tile is a Gingerbread House Tile." << endl;
+        cout << "You will lose one of your candies. You will be taken back to your previous position." << endl;
+
+        board.setPlayerPosition(board.getPlayerPositionOld(current_player.getPlayerNumber()), current_player.getPlayerNumber());
+        cout << "Your position is now " << board.getPlayerPosition(current_player.getPlayerNumber());
+
+    }
+}
+
+void Game::nextTurn(Player &current_player, Board &board)
+{
+    if (current_player.getPlayerSkipTurn())
+    {
+        cout << current_player.getPlayerName() << "'s turn has been skipped. " << current_player.getPlayerName() << " will play on the next turn." << endl;
+    }
+    else
+    {
+        board.setPlayerPositionOld(board.getPlayerPosition(current_player.getPlayerNumber()), current_player.getPlayerNumber());
+        bool turn_completed = false;
+        while (turn_completed == false)
+        {
+            // Ask the user who's turn it is what they would like to do
+            cout << "It is " << current_player.getPlayerName() << "'s turn." << endl;
+            cout << "What would you like to do?" << endl;
+            cout << "1. Draw a card" << endl;
+            cout << "2. Use candy" << endl;
+            cout << "3. Show player stats" << endl;
+
+            // Collect user input
+            bool valid_selection = false;
+            int turn_choice = -1;
+            while (valid_selection == false)
+            {
+                string turn_choice_str;
+                getline(cin, turn_choice_str);
+                int turn_choice_temp = stoi(turn_choice_str);
+
+                if (turn_choice_temp == 1 || turn_choice_temp == 2 || turn_choice_temp == 3)
+                {
+                    turn_choice = turn_choice_temp;
+                    valid_selection = true;
+                }
+                else
+                {
+                    cout << "Invalid selection. Please enter a valid option." << endl;
+                    valid_selection = false;
+                }
+            }
+
+            // Execute selected choice
+            if (turn_choice == 1)
+            {
+                drawCard(current_player, board);
+
+                srand(time(0));
+                int special_tile_chance = 0;
+                special_tile_chance = rand() % 10 + 1;
+
+                if (special_tile_chance <= 3)
+                {
+                    specialTile(current_player, board);
+                }
+                else
+                {
+                    turn_completed = true;
+                }
+            }
+            // else if (turn_choice == 2)
+            // {
+
+            // }
+            else if (turn_choice == 3)
+            {
+                current_player.printPlayerStats();
+                turn_completed = false;
+            }
+        }
+    }
+}
+

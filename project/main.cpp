@@ -18,6 +18,8 @@ int main()
     board.setPlayerCount(game.getPlayerCount());
     board.resetBoard();
     board.displayBoard();
+    game.nextTurn(players.at(0), board);
+    board.displayBoard();
 }
 
 void testLoadCandies()

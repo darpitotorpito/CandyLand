@@ -30,6 +30,11 @@ void Board::resetBoard()
     {
         _player_positions.push_back(0);
     }
+
+    for (int i = 0; i < _player_count; i++)
+    {
+        _player_positions_old.push_back(0);
+    }
 }
 
 void Board::displayTile(int position)
@@ -126,9 +131,19 @@ int Board::getPlayerCount() const
     return _player_count;
 }
 
+int Board::getPlayerPositionOld(int player_num) const
+{
+    return _player_positions_old[player_num];
+}
+
 void Board::setPlayerCount(int player_count)
 {
     _player_count = player_count;
+}
+
+void Board::setPlayerPositionOld(int old_position, int player_num)
+{
+    _player_positions_old[player_num] = old_position;
 }
 
 bool Board::addCandyStore(int position)
@@ -163,4 +178,25 @@ bool Board::movePlayer(int tile_to_move_forward, int player_num)
     }
     _player_positions[player_num] = new_player_position;
     return true;
+}
+
+int Board::findNextColorTile(int player_num, string color)
+{
+    int current_pos = getPlayerPosition(player_num) + 1;
+    int new_pos = 0;
+    bool new_pos_found = false;
+    while (new_pos_found == false)
+    {
+        if (_tiles[current_pos].color == color)
+        {
+            new_pos = current_pos;
+            new_pos_found = true;
+        }
+        else
+        {
+            new_pos_found = false;
+            current_pos++;
+        }
+    }
+    return new_pos;
 }

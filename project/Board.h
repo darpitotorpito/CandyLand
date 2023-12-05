@@ -9,6 +9,8 @@
 #include <vector>
 #include <fstream>
 #include <sstream>
+#include <cstdlib>
+#include <ctime>
 
 
 #define RED "\033[;41m"     /* Red */
@@ -38,6 +40,7 @@ private:
     int _candy_store_count;
     int _player_count = 0;
     vector<int> _player_positions;
+    vector<int> _player_positions_old;
 
 public:
     Board();
@@ -51,14 +54,17 @@ public:
     int getBoardSize() const;
     int getCandyStoreCount() const;
     int getPlayerPosition(int player_num) const;
+    int getPlayerPositionOld(int player_num) const;
     int getPlayerCount() const;
 
     void setPlayerCount(int player_count);
+    void setPlayerPositionOld(int old_position, int player_num);
 
     bool addCandyStore(int);
     bool isPositionCandyStore(int); 
 
     bool movePlayer(int tile_to_move_forward, int player_num);
+    int findNextColorTile(int player_num, string color);
 };
 
 #endif
