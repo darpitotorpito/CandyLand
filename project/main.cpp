@@ -6,6 +6,7 @@ int main()
 {
 
     // Load the game and information from text files
+    srand(time(0));
     Game game;
     game.loadCandies();
     game.loadCharacters();
@@ -16,12 +17,55 @@ int main()
 
     // Load the board
     Board board;
+    board.setPlayerCount(game.getPlayerCount());
     board.resetBoard();
     board.displayBoard();
+
+    //   for (int i = 0; i < game.getLoadedPlayers().size(); i++)
+    // {
+    //     cout << "Player Name: " << game.getLoadedPlayers().at(i).getPlayerName() << endl;
+    //     cout << "Player Number: " << game.getLoadedPlayers().at(i).getPlayerNumber() << endl;
+    //     cout << "Player Character Name: " << game.getLoadedPlayers().at(i).getPlayerCharacterName() << endl;
+    //     cout << "Player Stamina: " << game.getLoadedPlayers().at(i).getPlayerStamina() << endl;
+    //     cout << "Player Gold: " << game.getLoadedPlayers().at(i).getPlayerGold() << endl;
+    //     cout << "Player Effect: " << game.getLoadedPlayers().at(i).getPlayerEffect() << endl;
+    //     cout << "Player Inventory: " << endl;
+    //     game.getLoadedPlayers().at(i).printPlayerInventory();
+    //     cout << "--------------------------------------------" << endl;
+    // }
+
+    // vector<Player> players = game.getLoadedPlayers();
+    // cout << "check 2" << endl;
+    // game.nextTurn(game.getLoadedPlayers().at(0), board);
+
+    bool winner = false;
+    while (winner == false)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            game.nextTurn(game.getLoadedPlayers().at(i), board);
+        }
+    }
+
     // game.printCandyStore();
-    vector<Player> loaded_players_temp = game.getLoadedPlayers();
-    loaded_players_temp.at(0).setPlayerGold(20);
-    game.candyStore(loaded_players_temp.at(0));
+
+    // game.playRockPaperScissors();
+
+    // vector<Player> loaded_players_temp = game.getLoadedPlayers();
+    // loaded_players_temp.at(0).printPlayerStats();
+    // game.calamity(loaded_players_temp.at(0));
+    // game.calamity(loaded_players_temp.at(0));
+    // game.calamity(loaded_players_temp.at(0));
+    // game.calamity(loaded_players_temp.at(0));
+    // loaded_players_temp.at(0).addPlayerSkippedTurn();
+    // cout << loaded_players_temp.at(0).getPlayerSkipTurn().size() << endl;
+    // loaded_players_temp.at(0).addPlayerSkippedTurn();
+    // cout << loaded_players_temp.at(0).getPlayerSkipTurn().size() << endl;
+    // loaded_players_temp.at(0).playerSkippedTurn();
+    // cout << loaded_players_temp.at(0).getPlayerSkipTurn().size() << endl;
+    // loaded_players_temp.at(0).playerSkippedTurn();
+    // cout << loaded_players_temp.at(0).getPlayerSkipTurn().size() << endl;
+    // cout << loaded_players_temp.at(0).playerSkippedTurn() << endl;
 
     // board.testHiddenTreasure();
     // board.setPlayerCount(game.getPlayerCount());

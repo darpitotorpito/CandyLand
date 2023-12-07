@@ -12,7 +12,6 @@ Player::Player() // Default Constructor
     _gold = 0;
     _effect = "";
     _candy_amount = 0;
-    _skip_turn = false;
 }
 
 Player::Player(int player_number, string player_name, string character_name, int stamina, int gold, string effect, Candy inventory[_MAX_CANDY_AMOUNT])
@@ -23,7 +22,6 @@ Player::Player(int player_number, string player_name, string character_name, int
     _stamina = stamina;
     _gold = gold;
     _effect = effect;
-    _skip_turn = false;
 }
 
 // ===== ACCESSOR FUNCTIONS ===== //
@@ -57,7 +55,7 @@ string Player::getPlayerEffect() // Returns the player effect as a string
     return _effect;
 }
 
-bool Player::getPlayerSkipTurn()
+vector<bool> Player::getPlayerSkipTurn()
 {
     return _skip_turn;
 }
@@ -65,6 +63,16 @@ bool Player::getPlayerSkipTurn()
 bool Player::getPlayerRobbersRepel()
 {
     return _robbers_repel;
+}
+
+vector<Candy> Player::getPlayerInventory()
+{
+    vector<Candy> inv;
+    for (int i = 0; i < _candy_amount; i++)
+    {
+        inv.push_back(_inventory[i]);
+    }
+    return inv;
 }
 
 // ====== MUTATOR FUNCTIONS ===== //
@@ -118,7 +126,7 @@ void Player::setPlayerCandyAmount(int candy_amount) // CHECK THIS
     }
 }
 
-void Player::setPlayerSkipTurn(bool skip_turn)
+void Player::setPlayerSkipTurn(vector<bool> skip_turn)
 {
     _skip_turn = skip_turn;
 }
@@ -163,14 +171,51 @@ void Player::printPlayerStats()
     cout << "--------------------------------------" << endl;
     cout << "Here are your stats: " << endl;
     cout << "Player Name: " << _player_name << endl;
-    cout << "Player Number: " << _player_number << endl;
+    cout << "Player Number: " << _player_number + 1 << endl;
     cout << "Player Character Name: " << _character_name << endl;
     cout << "Player Stamina: " << _stamina << endl;
     cout << "Player Gold: " << _gold << endl;
     cout << "Player Effect: " << _effect << endl;
-    cout << "Player Inventory: " << "(" << _candy_amount << " candies)"<< endl;
+    cout << "Player Inventory: "
+         << "(" << _candy_amount << " candies)" << endl;
     printPlayerInventory();
     cout << "--------------------------------------" << endl;
+}
+
+void Player::printCandyStats()
+{
+    for (int i = 0; i < _candy_amount; i++)
+    {
+        if (_inventory[i].candy_type != "immunity")
+        {
+            cout << "-------------------------------" << endl;
+            cout << "Name: " << _inventory[i].name << endl;
+            cout << "Description: " << _inventory[i].description << endl;
+            cout << "Effect: " << _inventory[i].effect_type << endl;
+            cout << "Effect Value: " << _inventory[i].effect_value << endl;
+            cout << "Candy Type: " << _inventory[i].candy_type << endl;
+            cout << "Price: " << _inventory[i].price << endl;
+        }
+    }
+    cout << "-------------------------------" << endl;
+}
+
+void Player::addPlayerSkippedTurn()
+{
+    _skip_turn.push_back(true);
+}
+
+bool Player::playerSkippedTurn()
+{
+    if (_skip_turn.size() < 1)
+    {
+        return false;
+    }
+    else
+    {
+        _skip_turn.pop_back();
+        return true;
+    }
 }
 
 void Player::removeCandy(string candy_name) // // Removes candy from the inventory of the player
@@ -305,7 +350,7 @@ bool Player::addCandy(Candy candy) // Adds a Candy to the Player's inventory
 
 void Player::removeRandomCandy()
 {
-    srand(time(0));
+    // srand(time(0));
     int yeet_index = 0;
     yeet_index = rand() % _candy_amount + 1;
 
@@ -357,7 +402,7 @@ void Player::removeRandomCandy()
 
 int Player::removeRandomGold(int removal_amount_max, int removal_amount_min)
 {
-    srand(time(0));
+    // srand(time(0));
     int yeet_amount = 0;
     int yeet_amount_removed = 0;
     yeet_amount = rand() % (removal_amount_max - removal_amount_min + 1) + removal_amount_min;
@@ -379,9 +424,33 @@ int Player::removeRandomGold(int removal_amount_max, int removal_amount_min)
     return yeet_amount_removed;
 }
 
+int Player::removeRandomStamina(int removal_amount_max, int removal_amount_min)
+{
+    // srand(time(0));
+    int yeet_amount = 0;
+    int yeet_amount_removed = 0;
+    yeet_amount = rand() % (removal_amount_max - removal_amount_min + 1) + removal_amount_min;
+
+    if (getPlayerStamina() < yeet_amount)
+    {
+        yeet_amount_removed = getPlayerStamina();
+        setPlayerStamina(0);
+        cout << getPlayerName() << " has less than " << yeet_amount << " stamina. All stamina will be removed from their inventory." << endl;
+    }
+    else
+    {
+        yeet_amount_removed = yeet_amount;
+        setPlayerStamina(getPlayerStamina() - yeet_amount);
+    }
+
+    cout << yeet_amount_removed << " stamina was removed from " << _player_name << "'s inventory." << endl;
+    printPlayerStats();
+    return yeet_amount_removed;
+}
+
 int Player::addRandomGold(int add_amount_max, int add_amount_min)
 {
-    srand(time(0));
+    // srand(time(0));
     int add_amount = 0;
     int add_amount_added = 0;
     add_amount = rand() % (add_amount_max - add_amount_min + 1) + add_amount_min;
@@ -412,7 +481,7 @@ int Player::addRandomGold(int add_amount_max, int add_amount_min)
 
 int Player::addRandomStamina(int add_amount_max, int add_amount_min)
 {
-    srand(time(0));
+    // srand(time(0));
     int add_amount = 0;
     int add_amount_added = 0;
     add_amount = rand() % (add_amount_max - add_amount_min + 1) + add_amount_min;

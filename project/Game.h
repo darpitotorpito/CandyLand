@@ -63,13 +63,14 @@ public:
     vector<Player> selectCharacters();                      // Displays menu and allows players to select their characters
     void printCharacterData();                              // Prints the data of each of the characters
     void drawCard(Player &current_player, Board &board);    // Lets player draw a card
+    void useCandy(Player &current_player, Board &board);    // Lets player use candy in their inventory.
     bool playRiddle();                                      // Lets player play the riddle
     bool playRockPaperScissors();                           // Lets player play rock paper scissors.
     void candyStore(Player &current_player);                // Lets player buy from candy store
     void specialTile(Player &current_player, Board &board); // If the player lands on a special tile
     void sameTile(Player &current_player, Board &board);    // If the player lands on the same tile as another player.
     void hiddenTreasure(Player &current_player);            // If the player lands on a hidden treasure.
-    void calamity(Player &current_plyaer, Board &board);    // If a calamity occurs
+    void calamity(Player &current_plyaer);    // If a calamity occurs
     void nextTurn(Player &current_player, Board &board);    // Used to complete each player turn
 };
 

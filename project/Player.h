@@ -16,7 +16,7 @@ private:
     string _effect;                           // The effect the player currently has
     Candy _inventory[_MAX_CANDY_AMOUNT] = {}; // The Candy inventory of the player
     int _candy_amount;                        // The amount of candy in the player inventory.
-    bool _skip_turn = false;                  // If their next turn needs to be skipped
+    vector<bool> _skip_turn;                  // If their next turn needs to be skipped
     bool _robbers_repel = false;              // If they have the robbers repel shield
 
 public:
@@ -31,8 +31,9 @@ public:
     int getPlayerStamina();          // Returns the stamina of the player as an integer
     int getPlayerGold();             // Returns the gold the player currently has as a int
     string getPlayerEffect();        // Returns the effect the player currently has as a string
-    bool getPlayerSkipTurn();
+    vector<bool> getPlayerSkipTurn();
     bool getPlayerRobbersRepel();
+    vector<Candy> getPlayerInventory(); // Returns the inventory of the player as a vector of Candy objects
 
     // ====== MUTATOR FUNCTIONS ===== //
     void setPlayerNumber(int player_number);            // Sets the number of the player to the provided integer argument
@@ -43,15 +44,19 @@ public:
     void setPlayerEffect(string effect);                // Sets the effect of the player to the provided string argument
     void setPlayerInventory(vector<Candy> candy);       // Sets the inventory of the player to the provided vector of Candy argument
     void setPlayerCandyAmount(int _candy_amount);       // Sets the amount of candy in the players inventory to the provided integer argument
-    void setPlayerSkipTurn(bool skip_turn);             // Sets skip turn if next player turn needs to be skipped.
+    void setPlayerSkipTurn(vector<bool> skip_turn);             // Sets skip turn if next player turn needs to be skipped.
     void setPlayerRobbersRepel(bool robbers_repel);
 
     // ====== MEMBER FUNCTIONS ====== //
     void printPlayerInventory();                                          // Prints the inventory of the player
     void printPlayerStats();                                              // Prints the player stats
+    void printCandyStats();
+    void addPlayerSkippedTurn();
+    bool playerSkippedTurn();
     bool addCandy(Candy candy);
     void removeCandy(string candy_name);                                  // Removes candy from the inventory of the player
     void removeRandomCandy();                                             // Removes RANDOM candy from the inventory of the player
+    int removeRandomStamina(int removal_amount_max, int removal_amount_min); // Removes RANDOM amount of stamina from the inventory of the player.
     int removeRandomGold(int removal_amount_max, int removal_amount_min); // Removes RANDOM amount of gold from the inventory of the player
     int addRandomGold(int add_amount_max, int add_amount_min);            // Adds a RANDOM amount of gold to the inventory of the player
     int addRandomStamina(int add_amount_max, int add_amount_min);         // Adds a RANDOM amount of stamina to the inventory of the player

@@ -191,7 +191,7 @@ bool Game::loadRiddles()
 
 vector<string> Game::printCandyStore()
 {
-    srand(time(0));
+    // srand(time(0));
     vector<int> used_index;
     vector<string> printed_candies;
     for (int i = 0; i < 3; i++)
@@ -352,7 +352,7 @@ void Game::printCharacterData() // Prints the data of the character;
 
 int Game::generateRandomCard()
 {
-    srand(time(0));
+    // srand(time(0));
     int card_number = 0;
     card_number = rand() % 6 + 1;
     return card_number;
@@ -362,7 +362,7 @@ bool Game::playRiddle()
 {
     cout << "Read the following riddle and enter your answer. Be careful, you only get one try to get it right. Good luck!" << endl;
 
-    srand(time(0));
+    // srand(time(0));
     int riddle_index = rand() % _loaded_riddles.size();
 
     cout << _loaded_riddles.at(riddle_index).riddle << endl;
@@ -384,7 +384,84 @@ bool Game::playRiddle()
 
 bool Game::playRockPaperScissors()
 {
-    
+    cout << "Welcome to Rock Paper Scissors. You will be playing Rock Paper Scissors against the computer." << endl;
+
+    bool tie = true;
+    // srand(time(0));
+    while (tie == true)
+    {
+        cout << "Enter R (Rock), P (Paper), or S (Scissors)" << endl;
+
+        bool valid_input = false;
+        string player_choice;
+        while (valid_input == false)
+        {
+            string choice;
+            getline(cin, choice);
+            if (choice == "R" || choice == "P" || choice == "S" || choice == "r" || choice == "p" || choice == "s")
+            {
+                if (choice == "R" || choice == "r")
+                {
+                    cout << "You chose Rock." << endl;
+                    player_choice = "Rock";
+                }
+                else if (choice == "S" || choice == "s")
+                {
+                    cout << "You chose Scissors." << endl;
+                    player_choice = "Scissors";
+                }
+                else
+                {
+                    cout << "You chose paper." << endl;
+                    player_choice = "Paper";
+                }
+                valid_input = true;
+            }
+            else
+            {
+                cout << "Invalid selection. Please enter a valid option." << endl;
+                valid_input = false;
+            }
+        }
+
+        int computer_choice_int = rand() % 3 + 1;
+        string computer_choice;
+
+        if (computer_choice_int == 1)
+        {
+            computer_choice = "Rock";
+            cout << "The computer chose Rock." << endl;
+        }
+        else if (computer_choice_int == 2)
+        {
+            computer_choice = "Scissors";
+            cout << "The computer chose Scissors." << endl;
+        }
+        else
+        {
+            computer_choice = "Paper";
+            cout << "The computer chose Paper." << endl;
+        }
+
+        if (player_choice == computer_choice)
+        {
+            cout << "Tie! Play again" << endl;
+            tie = true;
+        }
+        else if ((player_choice == "Rock" && computer_choice == "Scissors") || (player_choice == "Scissors" && computer_choice == "Paper") || (player_choice == "Paper" && computer_choice == "Scissors"))
+        {
+            cout << "You win!" << endl;
+            tie = false;
+            return true;
+        }
+        else
+        {
+            cout << "The computer has won. Better luck next time!" << endl;
+            tie = false;
+            return false;
+        }
+    }
+    return false;
 }
 
 void Game::drawCard(Player &current_player, Board &board)
@@ -445,6 +522,88 @@ void Game::drawCard(Player &current_player, Board &board)
             board.setPlayerPosition(new_pos, current_player.getPlayerNumber());
         }
     }
+}
+
+void Game::useCandy(Player &current_player, Board &board)
+{
+    cout << "Here are your player stats." << endl;
+    current_player.printPlayerStats();
+    cout << "Here is a description of all the usable candies in your inventory." << endl;
+    cout << "Note: Immunity candies may not be used. They only protect you against attacks from other players." << endl;
+    current_player.printCandyStats();
+    cout << "Which candy would you like to use? If you would like to exit type \"exit\"." << endl;
+
+    bool valid_input = false;
+    Candy candy_choice;
+    while (valid_input == false)
+    {
+        string choice;
+        getline (cin, choice);
+
+        for (int i = 0; i < current_player.getPlayerInventory().size(); i++)
+        {
+            if (choice == current_player.getPlayerInventory().at(i).name)
+            {
+                candy_choice = current_player.getPlayerInventory().at(i);
+                valid_input = true;
+            }
+            if (choice == "exit")
+            {
+                valid_input = true;
+            }
+        }
+
+        if (valid_input == false)
+        {
+            cout << "Invalid selection. Please enter a valid option." << endl;
+        }
+    }
+
+    if (candy_choice.candy_type == "magical") // MAGICAL CANDIES
+    {
+        if (candy_choice.name == "Frosty Fizz")
+        {
+            current_player.addRandomStamina(10, 10);
+            current_player.removeCandy(candy_choice.name);
+        }
+        else if(candy_choice.name == "Crimson Crystal")
+        {
+            current_player.addRandomStamina(15, 15);
+            current_player.removeCandy(candy_choice.name);
+        }
+        else if(candy_choice.name == "Mystic Marshmallow")
+        {
+            current_player.addRandomStamina(20, 20);
+            current_player.removeCandy(candy_choice.name);
+        }
+    }
+    if (candy_choice.candy_type == "poison")
+    {
+        if (candy_choice.name == "Lucky Licorice")
+        {
+
+        }
+        else if (candy_choice.name == "Venomous Vortex")
+        {
+
+        }
+        else if (candy_choice.name == "Toxic Taffy")
+        {
+
+        }
+    }
+    if (candy_choice.candy_type == "gummy")
+    {
+        if (candy_choice.name == "Ruby Rupture")
+        {
+
+        }
+        else if (candy_choice.name == "Fearsome Fudge")
+        {
+
+        }
+    }
+
 }
 
 void Game::candyStore(Player &current_player)
@@ -534,13 +693,13 @@ void Game::candyStore(Player &current_player)
 
 void Game::specialTile(Player &current_player, Board &board)
 {
-    srand(time(0));
+    // srand(time(0));
     int special_tile_chance = -1;
     special_tile_chance = rand() % 10 + 1;
 
     if (special_tile_chance <= 3)
     {
-        srand(time(0));
+        // srand(time(0));
         int special_tile_type = 0;
         special_tile_type = rand() % 4 + 1;
 
@@ -631,7 +790,7 @@ void Game::hiddenTreasure(Player &current_player)
     cout << "You have landed on a Hidden Treasure! To secure your treasure you must correctly answer a riddle." << endl;
     if (playRiddle() == true)
     {
-        srand(time(0));
+        // srand(time(0));
         int treasure_type = 0;
         treasure_type = rand() % 100 + 1;
         if (treasure_type <= 30)
@@ -674,9 +833,9 @@ void Game::hiddenTreasure(Player &current_player)
     }
 }
 
-void Game::calamity(Player &current_player, Board &board)
+void Game::calamity(Player &current_player)
 {
-    srand(time(0));
+    // srand(time(0));
     int calamity_chance = -1;
     calamity_chance = rand() % 10 + 1;
 
@@ -695,33 +854,162 @@ void Game::calamity(Player &current_player, Board &board)
             cout << "Oh Dear! A calamity has ocurred! You got lost in the lollipop labyrinth! You will lose your next turn. To save your turn, you can play rock, paper, scissors." << endl;
 
             bool valid_input = false;
-            while (valid_input = false)
+            while (valid_input == false)
             {
                 string choice;
                 cout << "Would you like to play rock paper scissors? Enter Y or N" << endl;
-                getline (cin, choice);
+                getline(cin, choice);
                 if (choice == "Y" || choice == "N" || choice == "y" || choice == "n")
                 {
                     valid_input = true;
                     if (choice == "Y" || choice == "y")
                     {
+                        bool win = playRockPaperScissors();
 
+                        if (win == true)
+                        {
+                            cout << "Good Job! You will no longer lose your next turn." << endl;
+                        }
+                        else
+                        {
+                            cout << "You will lose your next turn." << endl;
+                            current_player.addPlayerSkippedTurn();
+                        }
+                    }
+                    else
+                    {
+                        cout << "You will lose your next turn." << endl;
+                        current_player.addPlayerSkippedTurn();
                     }
                 }
             }
         }
+        else if (calamity_type >= 65 && calamity_type < 80)
+        {
+            cout << "Watch Out! A calamity has ocurred! A candy avalanche has struck! You will lose 5 - 10 stamina. To save your stamina, you can play rock, paper, scissors." << endl;
+
+            bool valid_input = false;
+            while (valid_input == false)
+            {
+                string choice;
+                cout << "Would you like to play rock paper scissors? Enter Y or N" << endl;
+                getline(cin, choice);
+                if (choice == "Y" || choice == "N" || choice == "y" || choice == "n")
+                {
+                    valid_input = true;
+                    if (choice == "Y" || choice == "y")
+                    {
+                        bool win = playRockPaperScissors();
+
+                        if (win == true)
+                        {
+                            cout << "Good Job! You will no longer lose stamina!" << endl;
+                        }
+                        else
+                        {
+                            cout << "You will lose 5 - 10 stamina." << endl;
+                            current_player.removeRandomStamina(10, 5);
+                        }
+                    }
+                }
+                else
+                {
+                    cout << "You will lose 5 - 10 stamina." << endl;
+                    current_player.removeRandomStamina(10, 5);
+                }
+            }
+        }
+        else
+        {
+            cout << "Oops! A calamity has ocurred! You are stuck in a sticky taffy trap. You will lose your next turn unless you have a magical candy in your inventory." << endl;
+
+            vector<Candy> magic;
+            for (int i = 0; i < current_player.getPlayerInventory().size(); i++)
+            {
+                if (current_player.getPlayerInventory().at(i).candy_type == "magical")
+                {
+                    magic.push_back(current_player.getPlayerInventory().at(i));
+                }
+            }
+
+            if (magic.size() > 0)
+            {
+                cout << "You have a magical candy in your inventory. Would you like to use it to regain your lost turn? Enter Y or N." << endl;
+                bool valid_input = false;
+                while (valid_input == false)
+                {
+                    string choice;
+                    getline(cin, choice);
+
+                    if (choice == "Y" || choice == "y")
+                    {
+                        valid_input = true;
+                        cout << "Choose the magical candy you would like to use." << endl;
+                        cout << "-----------------------------------------------" << endl;
+
+                        for (int i = 0; i < magic.size(); i++)
+                        {
+                            cout << "Name: " << magic.at(i).name << endl;
+                            cout << "Description: " << magic.at(i).description << endl;
+                            cout << "Effect: " << magic.at(i).effect_type << endl;
+                            cout << "Effect Value: " << magic.at(i).effect_value << endl;
+                            cout << "Candy Type: " << magic.at(i).candy_type << endl;
+                            cout << "Price: " << magic.at(i).price << endl;
+                            cout << "-----------------------------------------------" << endl;
+                        }
+
+                        bool valid_input2 = false;
+                        while (valid_input2 == false)
+                        {
+                            string candy_choice;
+                            getline(cin, candy_choice);
+                            for (int i = 0; i < magic.size(); i++)
+                            {
+                                if (candy_choice == magic.at(i).name)
+                                {
+                                    current_player.removeCandy(magic.at(i).name);
+                                    cout << "You have used a " << candy_choice << " to escape the sticky taffy trap." << endl;
+                                    valid_input2 = true;
+                                    break;
+                                }
+                            }
+
+                            if (valid_input2 == false)
+                            {
+                                cout << "Invalid selection. Please enter a valid option." << endl;
+                            }
+                        }
+                    }
+                    else if (choice == "N" || choice == "n")
+                    {
+                        valid_input = true;
+                        current_player.addPlayerSkippedTurn();
+                        cout << "You have lost a turn." << endl;
+                    }
+                    else
+                    {
+                        cout << "Invalid selection. Please enter a valid option." << endl;
+                    }
+                }
+            }
+            else
+            {
+                cout << "You have no magical candies in your inventory. You have lost a turn" << endl;
+                current_player.addPlayerSkippedTurn();
+            }
+        }
     }
 }
+
 void Game::nextTurn(Player &current_player, Board &board)
 {
-    if (current_player.getPlayerSkipTurn())
+    if (current_player.playerSkippedTurn())
     {
         cout << current_player.getPlayerName() << "'s turn has been skipped. " << current_player.getPlayerName() << " will play on the next turn." << endl;
     }
     else
     {
         board.setPlayerPositionOld(board.getPlayerPosition(current_player.getPlayerNumber()), current_player.getPlayerNumber()); // Sets the old position of the player to the current position.
-
         bool turn_completed = false;
         while (turn_completed == false)
         {
@@ -769,12 +1057,13 @@ void Game::nextTurn(Player &current_player, Board &board)
                 {
                     hiddenTreasure(current_player);
                 }
+                calamity(current_player);
 
                 turn_completed = true;
             }
             // else if (turn_choice == 2)
             // {
-
+            //     useCandy(current_player, board);
             // }
             else if (turn_choice == 3)
             {
