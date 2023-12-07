@@ -9,23 +9,54 @@ int main()
     Game game;
     game.loadCandies();
     game.loadCharacters();
+    game.loadRiddles();
 
     // Load the players
-    // game.setLoadedPlayers(game.selectCharacters());
+    game.setLoadedPlayers(game.selectCharacters());
 
     // Load the board
     Board board;
+    board.resetBoard();
+    board.displayBoard();
+    // game.printCandyStore();
+    vector<Player> loaded_players_temp = game.getLoadedPlayers();
+    loaded_players_temp.at(0).setPlayerGold(20);
+    game.candyStore(loaded_players_temp.at(0));
 
-    board.testHiddenTreasure();
+    // board.testHiddenTreasure();
     // board.setPlayerCount(game.getPlayerCount());
-    // board.resetBoard();
-    // board.displayBoard();
+
+
+    // game.hiddenTreasure(game.getLoadedPlayers().at(0));
+    // cout << game.getLoadedPlayers().at(0).getPlayerRobbersRepel() << endl;
+    // srand(time(0));
+    // for (int i = 0; i < 20; i++)
+    // {
+    // int riddle_index = rand() % game.getLoadedRiddles().size();
+    // cout << riddle_index << endl;
+    // }
+    // for (int i = 0; i < game.getLoadedRiddles().size(); i++)
+    // {
+    //     cout << "Riddle " << i << endl;
+    //     cout << game.getLoadedRiddles().at(i).riddle << endl;
+    //     cout << "Solution" << endl;
+    //     cout << game.getLoadedRiddles().at(i).solution << endl;
+    // }
+
     // board.setPlayerPosition(10, game.getLoadedPlayers().at(0).getPlayerNumber());
     // board.setPlayerPosition(10, game.getLoadedPlayers().at(1).getPlayerNumber());
-    // vector <Player> loaded_players_temp = game.getLoadedPlayers();
+    // vector<Player> loaded_players_temp = game.getLoadedPlayers();
+    // game.hiddenTreasure(loaded_players_temp.at(0));
+    // cout << loaded_players_temp.at(0).getPlayerRobbersRepel() << endl;
+    // loaded_players_temp.at(0).addCandy(game.getLoadedCandies().at(0));
     // loaded_players_temp.at(0).setPlayerGold(5);
+    // loaded_players_temp.at(0).removeRandomGold(10, 5);
+    // loaded_players_temp.at(0).setPlayerGold(90);
+    // loaded_players_temp.at(0).addRandomGold(10, 20);
+    // loaded_players_temp.at(0).addRandomStamina(100, 50);
     // game.setLoadedPlayers(loaded_players_temp);
     // game.getLoadedPlayers().at(0).printPlayerStats();
+
     // board.displayBoard();
     // game.sameTile(game.getLoadedPlayers().at(0), board);
 }

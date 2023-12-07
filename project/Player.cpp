@@ -86,12 +86,6 @@ void Player::setPlayerCharacterName(string character_name) // Sets the player ch
 void Player::setPlayerStamina(int stamina) // Sets the player stamina to the provided integer argument
 {
     _stamina = stamina;
-
-    if (_stamina > 100)
-    {
-        cout << "You have reached the maximum amount of stamina (100). Your stamina will be set to 100." << endl;
-        _stamina = 100;
-    }
 }
 
 void Player::setPlayerGold(int gold) // Sets the player gold to the provided int argument
@@ -174,7 +168,7 @@ void Player::printPlayerStats()
     cout << "Player Stamina: " << _stamina << endl;
     cout << "Player Gold: " << _gold << endl;
     cout << "Player Effect: " << _effect << endl;
-    cout << "Player Inventory: " << endl;
+    cout << "Player Inventory: " << "(" << _candy_amount << " candies)"<< endl;
     printPlayerInventory();
     cout << "--------------------------------------" << endl;
 }
@@ -221,6 +215,92 @@ void Player::removeCandy(string candy_name) // // Removes candy from the invento
         _candy_amount--;
     }
     printPlayerStats();
+}
+
+bool Player::addCandy(Candy candy) // Adds a Candy to the Player's inventory
+{
+    bool candy_added = false;
+    for (int i = 0; i < _MAX_CANDY_AMOUNT; i++)
+    {
+        if (_inventory[i].name == "")
+        {
+            _inventory[i] = candy;
+            _candy_amount++;
+            candy_added = true;
+            cout << candy.name << " was added to " << _player_name << "'s inventory.";
+            printPlayerStats();
+            return true;
+            break;
+        }
+    }
+    if (candy_added == false)
+    {
+        cout << "Your inventory is currently full. Would you like to choose a candy to replace? Enter Y or N." << endl;
+
+        bool valid_input = false;
+        while (valid_input == false)
+        {
+            string choice;
+            getline(cin, choice);
+
+            if (choice == "Y" || choice == "N" || choice == "y" || choice == "n")
+            {
+                valid_input = true;
+                if (choice == "Y" || choice == "y")
+                {
+                    printPlayerStats();
+                    cout << "Please choose a candy to remove." << endl;
+
+                    bool valid_input_2 = false;
+                    while (valid_input_2 == false)
+                    {
+                        string removal_candy;
+                        getline(cin, removal_candy);
+
+                        for (int i = 0; i < _candy_amount; i++)
+                        {
+                            if (removal_candy == _inventory[i].name)
+                            {
+                                valid_input_2 = true;
+                                cout << removal_candy << " has been removed from your inventory." << endl;
+                                removeCandy(removal_candy);
+                                break;
+                            }
+                        }
+                        if (valid_input_2 == false)
+                        {
+                            cout << "Invalid selection. Please enter a valid option." << endl;
+                        }
+                    }
+                    for (int i = 0; i < _MAX_CANDY_AMOUNT; i++)
+                    {
+                        if (_inventory[i].name == "")
+                        {
+                            _inventory[i] = candy;
+                            _candy_amount++;
+                            candy_added = true;
+                            cout << candy.name << " was added to " << _player_name << "'s inventory." << endl;
+                            printPlayerStats();
+                            return true;
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    cout << "No candy was removed or added from your inventory." << endl;
+                    printPlayerStats();
+                    return false;
+                }
+            }
+            else
+            {
+                cout << "Invalid selection. Please enter a valid option." << endl;
+                valid_input = false;
+            }
+        }
+    }
+    return false;
 }
 
 void Player::removeRandomCandy()
@@ -290,10 +370,73 @@ int Player::removeRandomGold(int removal_amount_max, int removal_amount_min)
     }
     else
     {
+        yeet_amount_removed = yeet_amount;
         setPlayerGold(getPlayerGold() - yeet_amount);
     }
 
     cout << yeet_amount_removed << " gold was removed from " << _player_name << "'s inventory." << endl;
     printPlayerStats();
     return yeet_amount_removed;
+}
+
+int Player::addRandomGold(int add_amount_max, int add_amount_min)
+{
+    srand(time(0));
+    int add_amount = 0;
+    int add_amount_added = 0;
+    add_amount = rand() % (add_amount_max - add_amount_min + 1) + add_amount_min;
+
+    if (getPlayerGold() + add_amount > 100)
+    {
+        if (getPlayerGold() < 100)
+        {
+            add_amount_added = 100 - getPlayerGold();
+            setPlayerGold(100);
+            cout << getPlayerName() << " has received " << add_amount << " gold and maxxed out their gold." << endl;
+        }
+        else
+        {
+            cout << getPlayerName() << " has already maxxed out their gold. No gold can be added." << endl;
+        }
+    }
+    else
+    {
+        add_amount_added = add_amount;
+        setPlayerGold(getPlayerGold() + add_amount);
+    }
+
+    cout << add_amount_added << " gold was added to " << _player_name << "." << endl;
+    printPlayerStats();
+    return add_amount_added;
+}
+
+int Player::addRandomStamina(int add_amount_max, int add_amount_min)
+{
+    srand(time(0));
+    int add_amount = 0;
+    int add_amount_added = 0;
+    add_amount = rand() % (add_amount_max - add_amount_min + 1) + add_amount_min;
+
+    if (getPlayerStamina() + add_amount > 100)
+    {
+        if (getPlayerStamina() < 100)
+        {
+            add_amount_added = 100 - getPlayerStamina();
+            setPlayerStamina(100);
+            cout << getPlayerName() << " has received " << add_amount << " stamina and maxxed out their stamina." << endl;
+        }
+        else
+        {
+            cout << getPlayerName() << " has already maxxed out their stamina. No stamina can be added." << endl;
+        }
+    }
+    else
+    {
+        add_amount_added = add_amount;
+        setPlayerStamina(getPlayerStamina() + add_amount);
+    }
+
+    cout << add_amount_added << " stamina was added to " << _player_name << "'s inventory." << endl;
+    printPlayerStats();
+    return add_amount_added;
 }

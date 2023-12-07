@@ -35,8 +35,8 @@ class Board
 private:
     const static int _BOARD_SIZE = 83;
     Tile _tiles[_BOARD_SIZE];
-    const static int _MAX_CANDY_STORE = 3;
-    int _candy_store_position[_MAX_CANDY_STORE];
+    const static int _MAX_CANDY_STORE = 8;
+    int _candy_store_positions[_MAX_CANDY_STORE];
     int _candy_store_count;
     int _player_count = 0;
     vector<int> _player_positions;
@@ -66,6 +66,7 @@ public:
     bool isPositionHiddenTreasure(int position);
     void testHiddenTreasure();
 
+    void generateCandyStores();
     bool addCandyStore(int);
     bool isPositionCandyStore(int); 
 

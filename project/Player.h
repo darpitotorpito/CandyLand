@@ -32,7 +32,7 @@ public:
     int getPlayerGold();             // Returns the gold the player currently has as a int
     string getPlayerEffect();        // Returns the effect the player currently has as a string
     bool getPlayerSkipTurn();
-    bool getPlayerRobbersRepel(); 
+    bool getPlayerRobbersRepel();
 
     // ====== MUTATOR FUNCTIONS ===== //
     void setPlayerNumber(int player_number);            // Sets the number of the player to the provided integer argument
@@ -47,11 +47,14 @@ public:
     void setPlayerRobbersRepel(bool robbers_repel);
 
     // ====== MEMBER FUNCTIONS ====== //
-    void printPlayerInventory();                                           // Prints the inventory of the player
-    void printPlayerStats();                                               // Prints the player stats
-    void removeCandy(string candy_name);                                   // Removes candy from the inventory of the player
-    void removeRandomCandy();                                              // Removes RANDOM candy from the inventory of the player
+    void printPlayerInventory();                                          // Prints the inventory of the player
+    void printPlayerStats();                                              // Prints the player stats
+    bool addCandy(Candy candy);
+    void removeCandy(string candy_name);                                  // Removes candy from the inventory of the player
+    void removeRandomCandy();                                             // Removes RANDOM candy from the inventory of the player
     int removeRandomGold(int removal_amount_max, int removal_amount_min); // Removes RANDOM amount of gold from the inventory of the player
+    int addRandomGold(int add_amount_max, int add_amount_min);            // Adds a RANDOM amount of gold to the inventory of the player
+    int addRandomStamina(int add_amount_max, int add_amount_min);         // Adds a RANDOM amount of stamina to the inventory of the player
 };
 
 #endif

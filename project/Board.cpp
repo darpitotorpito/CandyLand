@@ -23,7 +23,7 @@ void Board::resetBoard()
     _candy_store_count = 0;
     for (int i = 0; i < _MAX_CANDY_STORE; i++)
     {
-        _candy_store_position[i] = -1;
+        _candy_store_positions[i] = -1;
     }
 
     for (int i = 0; i < _player_count; i++)
@@ -37,6 +37,7 @@ void Board::resetBoard()
     }
 
     generateHiddenTreasures();
+    generateCandyStores();
 }
 
 void Board::displayTile(int position)
@@ -196,11 +197,11 @@ void Board::testHiddenTreasure()
     {
         cout << "The hidden treasure is located at: " << _hidden_treasure_positions[i] << endl;
     }
-    
+
     for (int i = 0; i < _BOARD_SIZE; i++)
     {
         bool isHiddenTreasure = false;
-        
+
         for (int j = 0; j < _HIDDEN_TREASURE_AMOUNT; j++)
         {
             if (i == _hidden_treasure_positions[j])
@@ -209,7 +210,7 @@ void Board::testHiddenTreasure()
                 break;
             }
         }
-        
+
         if (isHiddenTreasure)
         {
             cout << "Position " << i << ": TRUE" << endl;
@@ -221,13 +222,50 @@ void Board::testHiddenTreasure()
     }
 }
 
+void Board::generateCandyStores()
+{
+    vector<int> eligible_tiles;
+    for (int i = 0; i < _BOARD_SIZE; i++)
+    {
+        if (i <= 27 && i > 0)
+        {
+            if (_tiles[i].color == MAGENTA)
+            {
+                eligible_tiles.push_back(i);
+            }
+        }
+        else if (i > 28 && i <= 54)
+        {
+            if (_tiles[i].color == GREEN)
+            {
+                eligible_tiles.push_back(i);
+            }
+        }
+        else
+        {
+            if (_tiles[i].color == BLUE)
+            {
+                eligible_tiles.push_back(i);
+            }
+        }
+    }
+
+    srand(time(0));
+    for (int i = 0; i < 8; i++)
+    {
+        int index_number = rand() % eligible_tiles.size();
+        _candy_store_positions[i] = eligible_tiles.at(index_number);
+        _candy_store_count++;
+    }
+}
+
 bool Board::addCandyStore(int position)
 {
     if (_candy_store_count >= _MAX_CANDY_STORE)
     {
         return false;
     }
-    _candy_store_position[_candy_store_count] = position;
+    _candy_store_positions[_candy_store_count] = position;
     _candy_store_count++;
     return true;
 }
@@ -236,7 +274,7 @@ bool Board::isPositionCandyStore(int board_position)
 {
     for (int i = 0; i < _candy_store_count; i++)
     {
-        if (_candy_store_position[i] == board_position)
+        if (_candy_store_positions[i] == board_position)
         {
             return true;
         }
